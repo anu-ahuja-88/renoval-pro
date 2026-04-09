@@ -1,0 +1,16 @@
+{
+  "name": "Renoval Pro NZ",
+  "short_name": "Renoval Pro",
+  "description": "Wellington renovation and painting specialists. Interior, exterior, plastering, gibbing, timber repair and kitchen cabinets.",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#0A0A0A",
+  "theme_color": "#0A0A0A",
+  "icons": [
+    {
+      "src": "/renoval-pro-logo-removebg-preview.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ]
+}
