@@ -4,7 +4,12 @@ import { Resend } from 'resend'
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY)
   try {
-    const { name, phone, email, service, message } = await req.json()
+    const { name, phone, email, service, message, honeypot } = await req.json()
+
+    // Honeypot check — silent rejection so bots don't know they were blocked
+    if (honeypot) {
+      return NextResponse.json({ success: true })
+    }
 
     if (!name || !phone || !email || !service) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })

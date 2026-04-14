@@ -60,13 +60,18 @@ export default function QuoteForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!validate()) return
+
+    // Honeypot check — bots fill this, humans never see it
+    const honeypot = ((e.currentTarget as HTMLFormElement).elements.namedItem('website') as HTMLInputElement)?.value ?? ''
+    if (honeypot) { setSubmitted(true); return }
+
     setLoading(true)
     setSubmitError('')
     try {
       const res = await fetch('/api/quote', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, honeypot }),
       })
       if (!res.ok) throw new Error('Send failed')
       setSubmitted(true)
@@ -203,6 +208,15 @@ export default function QuoteForm() {
                     className="space-y-5"
                     noValidate
                   >
+                    {/* Honeypot — hidden from real users, bots fill this in */}
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }}
+                    />
                     {/* Name + Phone row */}
                     <div className="grid sm:grid-cols-2 gap-5">
                       <Field
