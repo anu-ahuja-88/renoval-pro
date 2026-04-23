@@ -11,14 +11,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    if (!name || !phone || !email || !service) {
+    if (!name || !phone || !service) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
     await resend.emails.send({
       from: 'Renoval Pro Website <admin@verrawebstudio.co.nz>',
       to: ['silvagiljuanjose@gmail.com'],
-      replyTo: email,
+      ...(email ? { replyTo: email } : {}),
       subject: `New quote request — ${service} (${name})`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
@@ -38,12 +38,13 @@ export async function POST(req: NextRequest) {
                   <a href="tel:${phone}" style="color: #2563EB; text-decoration: none;">${phone}</a>
                 </td>
               </tr>
+              ${email ? `
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; color: #6c757d; font-size: 13px; vertical-align: top;">Email</td>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; color: #212529; font-size: 15px; font-weight: 600;">
                   <a href="mailto:${email}" style="color: #2563EB; text-decoration: none;">${email}</a>
                 </td>
-              </tr>
+              </tr>` : ''}
               <tr>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; color: #6c757d; font-size: 13px; vertical-align: top;">Service</td>
                 <td style="padding: 12px 0; border-bottom: 1px solid #e9ecef; color: #212529; font-size: 15px; font-weight: 600;">${service}</td>
@@ -57,7 +58,7 @@ export async function POST(req: NextRequest) {
             </table>
             <div style="margin-top: 24px; padding: 16px; background: #e7f0ff; border-radius: 8px; border-left: 4px solid #2563EB;">
               <p style="margin: 0; font-size: 14px; color: #1e40af;">
-                Hit reply to respond directly to ${name} at ${email}
+                ${email ? `Hit reply to respond directly to ${name} at ${email}` : `Call ${name} on ${phone} — no email provided.`}
               </p>
             </div>
           </div>

@@ -51,7 +51,7 @@ export default function QuoteForm() {
     const e: Partial<Record<keyof FormState, string>> = {}
     if (!form.name.trim()) e.name = 'Your name is required'
     if (!form.phone.trim()) e.phone = 'Phone number is required'
-    if (!form.email.trim() || !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Valid email address required'
+    if (form.email.trim() && !/\S+@\S+\.\S+/.test(form.email)) e.email = 'Check your email address'
     if (!form.service) e.service = 'Please select a service'
     setErrors(e)
     return Object.keys(e).length === 0
@@ -99,7 +99,7 @@ export default function QuoteForm() {
             <AnimateIn>
               <p
                 className="text-sm font-semibold uppercase tracking-widest mb-4"
-                style={{ color: '#60A5FA' }}
+                style={{ color: business.design.ctaColor }}
               >
                 Free Quote
               </p>
@@ -107,13 +107,28 @@ export default function QuoteForm() {
                 className="text-3xl sm:text-4xl font-extrabold text-white mb-6 leading-tight"
                 style={{ fontFamily: 'var(--font-heading)' }}
               >
-                Tell us about
+                Get a free quote.
                 <br />
-                your project.
+                <span className="text-white/40">No obligation.</span>
               </h2>
               <p className="text-white/60 text-lg leading-relaxed mb-10">
-                Fill in the form and we&apos;ll get back to you with a straight, no-nonsense quote. No obligation.
+                Tell us what you need. We come to you, walk through the job, and give you a clear written quote. Free. No pressure.
               </p>
+            </AnimateIn>
+
+            {/* Callback promise */}
+            <AnimateIn delay={0.08}>
+              <div
+                className="flex items-center gap-3 rounded-xl px-4 py-3 mb-8 text-sm font-medium"
+                style={{ backgroundColor: `${business.design.ctaColor}12`, border: `1px solid ${business.design.ctaColor}25`, color: 'rgba(255,255,255,0.75)' }}
+              >
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0 animate-pulse"
+                  style={{ backgroundColor: business.design.ctaColor }}
+                  aria-hidden="true"
+                />
+                We aim to get back to every enquiry the same day.
+              </div>
             </AnimateIn>
 
             {/* Contact details */}
@@ -243,16 +258,15 @@ export default function QuoteForm() {
                       />
                     </div>
 
-                    {/* Email */}
+                    {/* Email — optional */}
                     <Field
-                      label="Email address"
+                      label="Email address (optional)"
                       name="email"
                       type="email"
                       value={form.email}
                       onChange={handleChange}
                       icon={<Mail className="w-4 h-4" aria-hidden="true" />}
                       error={errors.email}
-                      required
                       autoComplete="email"
                     />
 
@@ -347,6 +361,20 @@ export default function QuoteForm() {
                       </div>
                     </div>
 
+                    {/* Trust signals */}
+                    <div className="flex flex-wrap gap-x-5 gap-y-1.5 py-1">
+                      {['Free. No obligation.', 'We come to you.', 'Same-day response.'].map((t) => (
+                        <span key={t} className="flex items-center gap-1.5 text-xs text-white/50 font-medium">
+                          <span
+                            className="w-1 h-1 rounded-full flex-shrink-0"
+                            style={{ backgroundColor: business.design.ctaColor }}
+                            aria-hidden="true"
+                          />
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
                     {/* Submit error */}
                     {submitError && (
                       <div className="rounded-xl px-4 py-3 text-sm text-red-300 border border-red-500/30 bg-red-500/10" role="alert">
@@ -392,15 +420,11 @@ export default function QuoteForm() {
                         ) : (
                           <>
                             <Send className="w-5 h-5" aria-hidden="true" />
-                            Send it through
+                            Get my free quote
                           </>
                         )}
                       </span>
                     </motion.button>
-
-                    <p className="text-xs text-white/50 text-center">
-                      We&apos;ll be in touch soon. No spam.
-                    </p>
                   </motion.form>
                 )}
               </AnimatePresence>

@@ -138,28 +138,32 @@ export default function Hero() {
               </motion.a>
             </motion.div>
 
-            {/* Credentials row */}
-            {business.about.credentials.length > 0 && (
-              <motion.div
-                {...(shouldReduce ? {} : {
-                  initial: { opacity: 0 },
-                  animate: { opacity: 1 },
-                  transition: t(0.52, 0.6),
-                })}
-                className="flex flex-wrap gap-x-8 gap-y-2 mt-10 pt-8 border-t border-white/8"
-              >
-                {business.about.credentials.slice(0, 3).map((cred, i) => (
-                  <div key={i} className="flex items-center gap-2 text-white/60">
-                    <span
-                      className="w-1 h-1 rounded-full flex-shrink-0"
-                      style={{ backgroundColor: business.design.ctaColor }}
-                      aria-hidden="true"
-                    />
-                    <span className="text-xs font-medium">{cred}</span>
-                  </div>
-                ))}
-              </motion.div>
-            )}
+            {/* Trust strip — always visible, no stats required */}
+            <motion.div
+              {...(shouldReduce ? {} : {
+                initial: { opacity: 0 },
+                animate: { opacity: 1 },
+                transition: t(0.52, 0.6),
+              })}
+              className="flex flex-wrap gap-x-6 gap-y-2 mt-10 pt-8 border-t border-white/8"
+              aria-label="Why choose Renoval Pro"
+            >
+              {[
+                'Free quotes',
+                'Fully insured',
+                'Wellington-based',
+                'We come to you',
+              ].map((item) => (
+                <div key={item} className="flex items-center gap-2">
+                  <span
+                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: business.design.ctaColor }}
+                    aria-hidden="true"
+                  />
+                  <span className="text-xs font-semibold text-white/65 uppercase tracking-wide">{item}</span>
+                </div>
+              ))}
+            </motion.div>
           </div>
 
           {/* Right: Visual composition */}
